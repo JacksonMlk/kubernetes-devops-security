@@ -22,7 +22,7 @@ pipeline {
         stage('Docker Build and Push') {
             steps {
               sh 'printenv'
-              docker.withRegistry('', "docker-hub") {
+              withDockerRegistry([credentialsId: "docker-hub", url:""]) {
                 sh 'docker build -t segurox/numeric-app:""$GIT_COMMIT"" .'
                 sh 'docker push segurox/numeric-app:""$GIT_COMMIT""'
               }

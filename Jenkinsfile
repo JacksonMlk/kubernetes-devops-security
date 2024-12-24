@@ -23,7 +23,7 @@ pipeline {
             steps {
               sh 'printenv'
               sh 'docker build -t segurox/numeric-app:""$GIT_COMMIT"" .'
-              sh 'docker push segurox/numeroc-app:""$GIT_COMMIT""'
+              sh 'docker push segurox/numeric-app:""$GIT_COMMIT""'
             }
         }   
     }

@@ -23,8 +23,9 @@ pipeline {
             steps {
               sh 'printenv'
               withDockerRegistry([credentialsId: "docker-hub", url:""]) {
-                sh 'docker build -t segurox/numeric-app:""$GIT_COMMIT"" .'
-                sh 'docker push segurox/numeric-app:""$GIT_COMMIT""'
+                sh 'docker build -t segurox/numeric-app:${env.GIT_COMMIT} .'
+                sh 'docker push segurox/numeric-app:${env.GIT_COMMIT}'
+
               }
               
             }

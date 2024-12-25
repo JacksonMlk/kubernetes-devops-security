@@ -23,12 +23,20 @@ pipeline {
             steps {
               sh 'printenv'
               withDockerRegistry([credentialsId: "docker-hub", url:""]) {
-                sh 'docker build -t segurox/numeric-app:${env.GIT_COMMIT} .'
-                sh 'docker push segurox/numeric-app:${env.GIT_COMMIT}'
-
+                sh 'docker build -t segurox/numeric-app:""$GIT_COMMIT"" .'
+                sh 'docker push segurox/numeric-app:""$GIT_COMMIT""'
               }
               
             }
-        }   
+        }
+        stage('Kubernetes Deployment - DEV') {
+            steps {
+              withKubeConfig([credentialsId: 'kubeconfig']) {
+              sh "sed -i 's#<aceidssidharith67/numeric-app>:<GIT_COMMIT>#g' k8s_deployment_service.yaml"
+              sh "kubectl apply -f k8s_deployment_service.yaml"
+        }
+    }
+}
+   
     }
 }

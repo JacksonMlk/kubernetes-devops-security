@@ -32,7 +32,7 @@ pipeline {
       steps {
         withKubeConfig([credentialsId: 'kubeconfig']) {
           // Corrigido a interpolação de variáveis no sed
-          sh "sed -i 's#<aceidssidharith67/numeric-app>:<GIT_COMMIT>#aceidssidharith67/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
+          sh "sed -i 's#<replace>#aceidssidharith67/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
           sh "kubectl apply -f k8s_deployment_service.yaml"
         }
       }

@@ -21,14 +21,14 @@ pipeline {
     }
     stage('Mutation Tests - PIT') {
       steps {
-          sh "mvn org.pitest:pitest-maven:mutationCoverage"
+        sh "mvn org.pitest:pitest-maven:mutationCoverage"
       }
       post {
-          always {
-            pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+        always {
+          pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
         }
+      }
     }
-}
     stage('SonarQube - SAST') {
       steps {
         withSonarQubeEnv('SonarQube') {
@@ -39,11 +39,18 @@ pipeline {
             waitForQualityGate abortPipeline: true
           }
         }
-        
       }
     }
-
-
+    stage('Vulnerability Scan - Docker') {
+      steps {
+        sh "mvn dependency-check:check"
+      }
+      post {
+        always {
+          dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+        }
+      }
+    }
     stage('Docker Build and Push') {
       steps {
         sh 'printenv'
